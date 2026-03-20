@@ -26,25 +26,13 @@ public class Usuario {
         OffsetDateTime dataCadastro,
         boolean ativo
     ) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.tipo = tipo;
-        this.dataCadastro = dataCadastro;
-        this.ativo = ativo;
-    }
-
-     public Usuario(
-        String nome,
-        String email,
-        String senha,
-        TipoUsuario tipo
-    ) {
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.tipo = tipo;
+        setId(id);
+        setNome(nome);
+        setEmail(email);
+        setSenha(senha);
+        setTipo(tipo);
+        setDataCadastro(dataCadastro);
+        setAtivo(ativo);
     }
 
     public int getId() {
