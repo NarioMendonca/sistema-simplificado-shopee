@@ -5,12 +5,12 @@ import java.time.OffsetDateTime;
 
 public class Pedido {
     int id;
-    int cliente_id;
-    OffsetDateTime data_pedido;
+    int clienteId;
+    OffsetDateTime dataPedido;
     Status status;
-    BigDecimal valor_total;
-    String metodo_pagamento;
-    String endereco_entrega;
+    BigDecimal valorTotal;
+    String metodoPagamento;
+    String enderecoEntrega;
 
     public enum Status {
         aguardando,
@@ -22,75 +22,75 @@ public class Pedido {
 
     public Pedido(
         int id,
-        int cliente_id,
-        OffsetDateTime data_pedido,
+        int clienteId,
+        OffsetDateTime dataPedido,
         Status status,
-        BigDecimal valor_total,
-        String metodo_pagamento,
-        String endereco_entrega
+        BigDecimal valorTotal,
+        String metodoPagamento,
+        String enderecoEntrega
     ) {
         setId(id);
-        setCliente_id(cliente_id);
-        setData_pedido(data_pedido);
+        setCliente_id(clienteId);
+        setDataPedido(dataPedido);
         setStatus(status);
-        setValor_total(valor_total);
-        setMetodo_pagamento(metodo_pagamento);
-        setEndereco_entrega(endereco_entrega);
+        setValorTotal(valorTotal);
+        setMetodoPagamento(metodoPagamento);
+        setEnderecoEntrega(enderecoEntrega);
     }
 
     public int getId() {
         return id;
     }
 
-    public int getCliente_id() {
-        return cliente_id;
+    public int getClienteId() {
+        return clienteId;
     }
 
-    public OffsetDateTime getData_pedido() {
-        return data_pedido;
+    public OffsetDateTime getDataPedido() {
+        return dataPedido;
     }
 
     public Status getStatus() {
         return status;
     }
 
-    public BigDecimal getValor_total() {
-        return valor_total;
+    public BigDecimal getValorTotal() {
+        return valorTotal;
     }
 
-    public String getMetodo_pagamento() {
-        return metodo_pagamento;
+    public String getMetodoPagamento() {
+        return metodoPagamento;
     }
 
-    public String getEndereco_entrega() {
-        return endereco_entrega;
+    public String getEnderecoEntrega() {
+        return enderecoEntrega;
     }
 
     public void setId(int id) {
         this.id = id;
     }
     
-    public void setCliente_id(int cliente_id) {
-        this.cliente_id = cliente_id;
+    public void setCliente_id(int clienteId) {
+        this.clienteId = clienteId;
     }
 
     public void setStatus(Status status) {
         this.status = status;
     }
 
-    public void setValor_total(BigDecimal valor_total) {
-        this.valor_total = valor_total;
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
     }
 
-    public void setData_pedido(OffsetDateTime data_pedido) {
-        this.data_pedido = data_pedido;
+    public void setDataPedido(OffsetDateTime dataPedido) {
+        this.dataPedido = dataPedido;
     }
 
-    public void setMetodo_pagamento(String metodo_pagamento) {
-        this.metodo_pagamento = metodo_pagamento;
+    public void setMetodoPagamento(String metodoPagamento) {
+        this.metodoPagamento = metodoPagamento;
     }
 
-    public void setEndereco_entrega(String endereco_entrega) {
-        this.endereco_entrega = endereco_entrega;
+    public void setEnderecoEntrega(String enderecoEntrega) {
+        this.enderecoEntrega = enderecoEntrega;
     }
 }
