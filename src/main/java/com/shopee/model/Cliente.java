@@ -3,16 +3,16 @@ package com.shopee.model;
 import java.time.OffsetDateTime;
 
 public class Cliente extends Usuario {
-    int id;
-    int usuarioId;
+    Integer id;
+    Integer usuarioId;
     String cpf;
     String telefone;
     OffsetDateTime dataNascimento;
     String endereco;
 
     public Cliente(
-        int id,
-        int usuarioId,
+        Integer id,
+        Integer usuarioId,
         String nome,
         String email,
         String senha,
@@ -33,11 +33,11 @@ public class Cliente extends Usuario {
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public int getUsuarioId() {
+    public Integer getUsuarioId() {
         return usuarioId;
     }
 
@@ -58,11 +58,11 @@ public class Cliente extends Usuario {
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public void setUsuarioId(int usuarioId) {
+    public void setUsuarioId(Integer usuarioId) {
         this.usuarioId = usuarioId;
         super.setId(usuarioId);
     }

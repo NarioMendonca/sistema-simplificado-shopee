@@ -56,6 +56,19 @@ public class UsuarioDAO implements DAO<Usuario> {
         return Optional.empty();
     }
 
+    public Optional<Usuario> buscarPorEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM usuario WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return Optional.of(mapper(rs));
+            }
+        }
+        return Optional.empty();
+    }
+
+
     @Override
     public List<Usuario> buscarTodos() throws SQLException {
         List<Usuario> usuarios = new ArrayList<>();

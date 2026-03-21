@@ -18,13 +18,13 @@ public class Usuario {
     }
 
     public Usuario(
-        int id,
+        Integer id,
         String nome,
         String email,
         String senha,
         TipoUsuario tipo,
         OffsetDateTime dataCadastro,
-        boolean ativo
+        Boolean ativo
     ) {
         setId(id);
         setNome(nome);
@@ -35,7 +35,7 @@ public class Usuario {
         setAtivo(ativo);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -59,11 +59,11 @@ public class Usuario {
         return dataCadastro;
     }
 
-    public boolean getAtivo() {
+    public Boolean getAtivo() {
         return ativo;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -87,7 +87,7 @@ public class Usuario {
         this.dataCadastro = dataCadastro;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 }

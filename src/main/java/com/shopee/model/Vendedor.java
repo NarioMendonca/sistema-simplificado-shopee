@@ -4,16 +4,16 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 public class Vendedor extends Usuario {
-    int id;
-    int usuarioId;
+    Integer id;
+    Integer usuarioId;
     String cnpj;
     String razaoSocial;
     String telefone;
     BigDecimal avaliacao;
 
     public Vendedor(
-        int id,
-        int usuarioId,
+        Integer id,
+        Integer usuarioId,
         String nome,
         String email,
         String senha,
@@ -33,11 +33,11 @@ public class Vendedor extends Usuario {
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return this.getId();
     }
 
-    public int getUsuarioId() {
+    public Integer getUsuarioId() {
         return usuarioId;
     }
 
@@ -58,11 +58,11 @@ public class Vendedor extends Usuario {
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public void setUsuarioId(int usuarioId) {
+    public void setUsuarioId(Integer usuarioId) {
         this.usuarioId = usuarioId;
         super.setId(usuarioId);
     }
