@@ -10,5 +10,5 @@ public interface DAO<T> {
     List<T> buscarTodos() throws SQLException;
     void atualizar(T entidade) throws SQLException;
     void deletar(int id) throws SQLException;
-    int contar() throws SQLException;
+    long contar() throws SQLException;
 }

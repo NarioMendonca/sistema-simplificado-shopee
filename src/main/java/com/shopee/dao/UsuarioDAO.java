@@ -88,12 +88,12 @@ public class UsuarioDAO implements DAO<Usuario> {
     }
 
     @Override
-    public int contar() throws SQLException {
+    public long contar() throws SQLException {
         String sql = "SELECT COUNT(*) as contagem_usuarios FROM usuario";
         PreparedStatement pstm = connection.prepareStatement(sql);
         ResultSet resultSet = pstm.executeQuery();
         resultSet.next();
-        int contagemUsuarios = resultSet.getInt("contagem_usuarios");
+        long contagemUsuarios = resultSet.getLong("contagem_usuarios");
         return contagemUsuarios;
     }
     
