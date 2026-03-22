@@ -3,17 +3,17 @@ package com.shopee.model;
 import java.math.BigDecimal;
 
 public class ItemPedido {
-    int id;
-    int pedidoId;
-    int produtoId;
-    int quantidade;
+    Integer id;
+    Integer pedidoId;
+    Integer produtoId;
+    Integer quantidade;
     BigDecimal precoUnitario;
 
     public ItemPedido(
-        int id,
-        int pedidoId,
-        int produtoId,
-        int quantidade,
+        Integer id,
+        Integer pedidoId,
+        Integer produtoId,
+        Integer quantidade,
         BigDecimal precoUnitario
     ) {
         setId(quantidade);
@@ -23,19 +23,19 @@ public class ItemPedido {
         setPrecoUnitario(precoUnitario);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public int getPedidoId() {
+    public Integer getPedidoId() {
         return pedidoId;
     }
 
-    public int getProdutoId() {
+    public Integer getProdutoId() {
         return produtoId;
     }
 
-    public int getQuantidade() {
+    public Integer getQuantidade() {
         return quantidade;
     }
 
@@ -43,19 +43,19 @@ public class ItemPedido {
         return precoUnitario;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public void setPedidoId(int pedidoId) {
+    public void setPedidoId(Integer pedidoId) {
         this.pedidoId = pedidoId;
     }
 
-    public void setProdutoId(int produtoId) {
+    public void setProdutoId(Integer produtoId) {
         this.produtoId = produtoId;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
 

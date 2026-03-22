@@ -2,15 +2,18 @@ package com.shopee.model;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 public class Pedido {
-    int id;
-    int clienteId;
-    OffsetDateTime dataPedido;
-    Status status;
-    BigDecimal valorTotal;
-    String metodoPagamento;
-    String enderecoEntrega;
+    private Integer id;
+    private Integer clienteId;
+    private OffsetDateTime dataPedido;
+    private Status status;
+    private BigDecimal valorTotal;
+    private String metodoPagamento;
+    private String enderecoEntrega;
+    private List<ItemPedido> itensPedido;
+
 
     public enum Status {
         aguardando,
@@ -21,28 +24,35 @@ public class Pedido {
     }
 
     public Pedido(
-        int id,
-        int clienteId,
+        Integer id,
+        Integer clienteId,
         OffsetDateTime dataPedido,
         Status status,
         BigDecimal valorTotal,
         String metodoPagamento,
-        String enderecoEntrega
+        String enderecoEntrega,
+        List<ItemPedido> itensPedido
     ) {
         setId(id);
-        setCliente_id(clienteId);
+        setClienteId(clienteId);
         setDataPedido(dataPedido);
         setStatus(status);
         setValorTotal(valorTotal);
         setMetodoPagamento(metodoPagamento);
         setEnderecoEntrega(enderecoEntrega);
+        setItensPedido(itensPedido);
     }
 
-    public int getId() {
+    public void adicionarItemAoPedido(ItemPedido itemPedido) {
+        this.itensPedido.add(itemPedido);
+    }
+
+    //getters
+    public Integer getId() {
         return id;
     }
 
-    public int getClienteId() {
+    public Integer getClienteId() {
         return clienteId;
     }
 
@@ -66,11 +76,16 @@ public class Pedido {
         return enderecoEntrega;
     }
 
-    public void setId(int id) {
+    public List<ItemPedido> getItensPedidos() {
+        return this.itensPedido;
+    }
+
+    // setters
+    public void setId(Integer id) {
         this.id = id;
     }
     
-    public void setCliente_id(int clienteId) {
+    public void setClienteId(Integer clienteId) {
         this.clienteId = clienteId;
     }
 
@@ -92,5 +107,9 @@ public class Pedido {
 
     public void setEnderecoEntrega(String enderecoEntrega) {
         this.enderecoEntrega = enderecoEntrega;
+    }
+
+    public void setItensPedido(List<ItemPedido> itensPedido) {
+        this.itensPedido = itensPedido;
     }
 }

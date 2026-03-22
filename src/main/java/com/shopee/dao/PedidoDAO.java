@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.shopee.model.ItemPedido;
 import com.shopee.model.Pedido;
 import com.shopee.util.DatabaseConnection;
 
@@ -24,7 +25,8 @@ public class PedidoDAO implements DAO<Pedido> {
             Pedido.Status.valueOf(rs.getString("status")),
             rs.getBigDecimal("valor_total"),
             rs.getString("metodo_pagamento"),
-            rs.getString("endereco_entrega")
+            rs.getString("endereco_entrega"),
+            new ArrayList<ItemPedido>()
         );
     }
 
