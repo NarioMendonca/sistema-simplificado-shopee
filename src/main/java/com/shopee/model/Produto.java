@@ -4,28 +4,28 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 public class Produto {
-    int id;
-    int vendedorId;
+    Integer id;
+    Integer vendedorId;
     String nome;
     String descricao;
     String categoria;
     BigDecimal preco;
-    int quantidadeEstoque;
+    Integer quantidadeEstoque;
     String imagemUrl;
     OffsetDateTime dataCadastro;
-    boolean ativo;
+    Boolean ativo;
 
     public Produto(
-        int id,
-        int vendedorId,
+        Integer id,
+        Integer vendedorId,
         String nome,
         String descricao,
         String categoria,
         BigDecimal preco,
-        int quantidadeEstoque,
+        Integer quantidadeEstoque,
         String imagemUrl,
         OffsetDateTime dataCadastro,
-        boolean ativo
+        Boolean ativo
     ) {
         setId(id);
         setVendedorId(vendedorId);
@@ -39,11 +39,11 @@ public class Produto {
         setAtivo(ativo);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public int getVendedorId() {
+    public Integer getVendedorId() {
         return vendedorId;
     }
 
@@ -63,7 +63,7 @@ public class Produto {
         return preco;
     }
 
-    public int getQuantidadeEstoque() {
+    public Integer getQuantidadeEstoque() {
         return quantidadeEstoque;
     }
 
@@ -76,15 +76,15 @@ public class Produto {
         return dataCadastro;
     }
 
-    public boolean getAtivo() {
+    public Boolean getAtivo() {
         return ativo;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public void setVendedorId(int vendedorId) {
+    public void setVendedorId(Integer vendedorId) {
         this.vendedorId = vendedorId;
     }
 
@@ -104,7 +104,7 @@ public class Produto {
         this.preco = preco;
     }
 
-    public void setQuantidadeEstoque(int quantidadeEstoque) {
+    public void setQuantidadeEstoque(Integer quantidadeEstoque) {
         this.quantidadeEstoque = quantidadeEstoque;
     }
 
@@ -116,7 +116,7 @@ public class Produto {
         this.dataCadastro = dataCadastro;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 }
