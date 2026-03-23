@@ -15,23 +15,27 @@ import com.shopee.util.DatabaseConnection;
 public class ProdutoDAO implements DAO<Produto> {
     private Connection connection = DatabaseConnection.getInstance().getConnection();
 
-    private Produto mapper(ResultSet rs) throws SQLException {
-        return new Produto(
-            rs.getInt("id"),
-            rs.getInt("vendedor_id"),
-            rs.getString("nome"),
-            rs.getString("descricao"),
-            rs.getString("categoria"),
-            rs.getBigDecimal("preco"),
-            rs.getInt("quantidade_estoque"),
-            rs.getString("imagem_url"),
-            rs.getObject("data_cadastro", OffsetDateTime.class),
-            rs.getBoolean("ativo")
-        );
+    private Produto mapper(ResultSet rs) {
+        try {
+            return new Produto(
+                rs.getInt("id"),
+                rs.getInt("vendedor_id"),
+                rs.getString("nome"),
+                rs.getString("descricao"),
+                rs.getString("categoria"),
+                rs.getBigDecimal("preco"),
+                rs.getInt("quantidade_estoque"),
+                rs.getString("imagem_url"),
+                rs.getObject("data_cadastro", OffsetDateTime.class),
+                rs.getBoolean("ativo")
+            );
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao mapear dados para entidade produto", sqlException);
+        }
     }
 
     @Override
-    public Produto salvar(Produto produto) throws SQLException {
+    public Produto salvar(Produto produto) {
         String sql = """
         INSERT INTO produto (
             vendedor_id,
@@ -61,11 +65,13 @@ public class ProdutoDAO implements DAO<Produto> {
                 produto.setDataCadastro(resultSet.getObject("data_cadastro", OffsetDateTime.class));
             }
             return produto;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao inserir em produto", sqlException);
         }
     }
 
     @Override
-    public Optional<Produto> buscarPorId(int id) throws SQLException {
+    public Optional<Produto> buscarPorId(int id) {
         String sql = "SELECT * FROM produto WHERE id = ?";
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
             pstm.setInt(1, id);
@@ -74,13 +80,14 @@ public class ProdutoDAO implements DAO<Produto> {
                 Produto produto = mapper(rs);
                 return Optional.of(produto);
             }
-            
-        };
-        return Optional.empty();
+            return Optional.empty();
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao buscar em produto id=" + id, sqlException);
+        }
     }
 
     @Override
-    public List<Produto> buscarTodos() throws SQLException {
+    public List<Produto> buscarTodos() {
         List<Produto> produtos = new ArrayList<>();
         String sql = "SELECT * FROM produto";
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -89,13 +96,15 @@ public class ProdutoDAO implements DAO<Produto> {
             while (resultSet.next()) {
                 produtos.add(mapper(resultSet));
             }
-        };
+            return produtos;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao buscar dados de produto", sqlException);
+        }
         
-        return produtos;
     }
 
     @Override
-    public void atualizar(Produto produto) throws SQLException {
+    public void atualizar(Produto produto) {
         String sql = """
             UPDATE produto SET 
                 nome = ?, 
@@ -107,35 +116,43 @@ public class ProdutoDAO implements DAO<Produto> {
                 ativo = ? 
             WHERE id = ?
         """;
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setString(1, produto.getNome());
-        pstm.setString(2, produto.getDescricao());
-        pstm.setString(3, produto.getCategoria());
-        pstm.setBigDecimal(4, produto.getPreco());
-        pstm.setInt(5, produto.getQuantidadeEstoque());
-        pstm.setString(6, produto.getImagemUrl());
-        pstm.setBoolean(7, produto.getAtivo());
-        pstm.setInt(8, produto.getId());
-        pstm.executeUpdate();
+
+        try(PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, produto.getNome());
+            pstm.setString(2, produto.getDescricao());
+            pstm.setString(3, produto.getCategoria());
+            pstm.setBigDecimal(4, produto.getPreco());
+            pstm.setInt(5, produto.getQuantidadeEstoque());
+            pstm.setString(6, produto.getImagemUrl());
+            pstm.setBoolean(7, produto.getAtivo());
+            pstm.setInt(8, produto.getId());
+            pstm.executeUpdate();
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao ao atualizar produto id=" + produto.getId(), sqlException);
+        };
     }
 
     @Override
-    public void deletar(int id) throws SQLException {
+    public void deletar(int id) {
         String sql = "DELETE FROM produto WHERE id = ?";
         try (PreparedStatement pstm = connection.prepareStatement(sql);) {
             pstm.setInt(1, id);
             pstm.executeUpdate();
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao deletar produto id=" + id, sqlException);
         }
     }
 
     @Override
-    public long contar() throws SQLException {
+    public long contar() {
         String sql = "SELECT COUNT(*) as contagem_produtos FROM produto";
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
             ResultSet resultSet = pstm.executeQuery();
             resultSet.next();
             long contagemProdutos = resultSet.getLong("contagem_produtos");
             return contagemProdutos;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao contar tabela produto", sqlException);
         }
     }
     

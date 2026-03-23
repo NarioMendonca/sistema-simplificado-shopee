@@ -13,32 +13,37 @@ import java.util.Optional;
 import com.shopee.model.ItemPedido;
 import com.shopee.model.Pedido;
 import com.shopee.util.DatabaseConnection;
+import com.shopee.util.Logger;
 
 public class PedidoDAO implements DAO<Pedido> {
     private Connection connection = DatabaseConnection.getInstance().getConnection();
 
-    private Pedido mapper(ResultSet rs) throws SQLException {
-        return new Pedido(
-            rs.getInt("id"),
-            rs.getInt("cliente_id"),
-            rs.getObject("data_pedido", OffsetDateTime.class),
-            Pedido.Status.valueOf(rs.getString("status")),
-            rs.getBigDecimal("valor_total"),
-            rs.getString("metodo_pagamento"),
-            rs.getString("endereco_entrega"),
-            new ArrayList<ItemPedido>()
-        );
+    private Pedido mapper(ResultSet rs) {
+        try {
+            return new Pedido(
+                rs.getInt("id"),
+                rs.getInt("cliente_id"),
+                rs.getObject("data_pedido", OffsetDateTime.class),
+                Pedido.Status.valueOf(rs.getString("status")),
+                rs.getBigDecimal("valor_total"),
+                rs.getString("metodo_pagamento"),
+                rs.getString("endereco_entrega"),
+                new ArrayList<ItemPedido>()
+            );
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao mapear dados para entidade pedido", sqlException);
+        }
     }
 
     @Override
-    public Pedido salvar(Pedido pedido) throws SQLException {
+    public Pedido salvar(Pedido pedido) {
         String sql = """
         INSERT INTO pedido (
             cliente_id,
             status,
             valor_total,
             metodo_pagamento,
-            endereco_entrega,
+            endereco_entrega
         ) 
         VALUES (?, ?, ?, ?, ?) RETURNING id, data_pedido
         """;
@@ -55,11 +60,14 @@ public class PedidoDAO implements DAO<Pedido> {
                 pedido.setDataPedido(resultSet.getObject("data_pedido", OffsetDateTime.class));
             }
             return pedido;
+        } catch (SQLException sqlException) {
+            Logger.getInstance().logDebug("Erro ao inserir", sqlException);
+            throw new RuntimeException("Erro ao inserir pedido id=" + pedido.getId(), sqlException);
         }
     }
 
     @Override
-    public Optional<Pedido> buscarPorId(int id) throws SQLException {
+    public Optional<Pedido> buscarPorId(int id) {
         String sql = "SELECT * FROM pedido WHERE id = ?";
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
             pstm.setInt(1, id);
@@ -68,13 +76,14 @@ public class PedidoDAO implements DAO<Pedido> {
                 Pedido pedido = mapper(rs);
                 return Optional.of(pedido);
             }
-            
-        };
-        return Optional.empty();
+            return Optional.empty();
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao buscar pedido id=" + id, sqlException);
+        }
     }
 
     @Override
-    public List<Pedido> buscarTodos() throws SQLException {
+    public List<Pedido> buscarTodos() {
         List<Pedido> pedidos = new ArrayList<>();
         String sql = "SELECT * FROM pedido";
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -83,21 +92,14 @@ public class PedidoDAO implements DAO<Pedido> {
             while (resultSet.next()) {
                 pedidos.add(mapper(resultSet));
             }
-        };
-        
-        return pedidos;
+            return pedidos;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao buscar dados da tabela pedido", sqlException);
+        }
     }
 
-    // id
-    // cliente_id
-    // data_pedido
-    // status
-    // valor_total
-    // metodo_pagamento
-    // endereco_entrega
-
     @Override
-    public void atualizar(Pedido pedido) throws SQLException {
+    public void atualizar(Pedido pedido) {
         String sql = """
             UPDATE pedido SET 
                 status = ?, 
@@ -110,25 +112,31 @@ public class PedidoDAO implements DAO<Pedido> {
             pstm.setString(2, pedido.getMetodoPagamento());
             pstm.setString(3, pedido.getEnderecoEntrega());
             pstm.executeUpdate();
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao atualizar dados de pedido id=" + pedido.getId(), sqlException);
         }
     }
 
     @Override
-    public void deletar(int id) throws SQLException {
+    public void deletar(int id) {
         String sql = "DELETE FROM pedido WHERE id = ?";
         try (PreparedStatement pstm = connection.prepareStatement(sql);) {
             pstm.setInt(1, id);
             pstm.executeUpdate();
+        }  catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao deletar pedido id=" + id, sqlException);
         }
     }
 
     @Override
-    public long contar() throws SQLException {
+    public long contar() {
         String sql = "SELECT COUNT(*) as contagem_pedidos FROM pedido";
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
             ResultSet resultSet = pstm.executeQuery();
             long contagemPedidos = resultSet.getLong("contagem_pedidos");
             return contagemPedidos;
+        }  catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao realizar count da tabela pedido", sqlException);
         }
     }
     
