@@ -69,6 +69,7 @@ public class Logger {
         writeLog("Debug", log, exception);
     }
 
+    // singleton
     public static Logger getInstance() {
         if (Objects.isNull(instance)) {
             instance = new Logger();
