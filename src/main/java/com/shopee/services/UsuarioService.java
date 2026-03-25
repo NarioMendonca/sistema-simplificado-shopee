@@ -1,6 +1,5 @@
 package com.shopee.services;
 
-import java.sql.SQLException;
 import java.util.Optional;
 
 import com.shopee.dao.UsuarioDAO;
@@ -9,7 +8,7 @@ import com.shopee.model.Usuario;
 public class UsuarioService {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-    public Usuario cadastrar(String nome, String email, String senha, Usuario.TipoUsuario tipo) throws SQLException {
+    public Usuario cadastrar(String nome, String email, String senha, Usuario.TipoUsuario tipo) {
         if (nome.length() < 3) {
             throw new RuntimeException("Nome deve ter pelo menos 3 caracteres");
         }
@@ -35,18 +34,18 @@ public class UsuarioService {
         return usuarioCriado;
     }
 
-    public Usuario logar(String email, String senha) throws SQLException {
+    public Usuario logar(String email, String senha) {
         Optional<Usuario> usuario = usuarioDAO.buscarPorEmail(email);
         if (usuario.isEmpty()) {
             throw new RuntimeException("Credenciais inválidas");
         }
-        if (usuario.get().getSenha().equals(senha)) {
+        if (!usuario.get().getSenha().equals(senha)) {
             throw new RuntimeException("Credenciais inválidas");
         }
         return usuario.get();
     }
 
-    public Usuario atualizarDados(Integer id, String nome, String email, String senha, Boolean ativo) throws SQLException {
+    public Usuario atualizarDados(Integer id, String nome, String email, String senha, Boolean ativo) {
         Optional<Usuario> antigoUsuario = usuarioDAO.buscarPorId(id);
 
         if (antigoUsuario.isEmpty()) {

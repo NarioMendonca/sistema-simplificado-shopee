@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import com.shopee.controller.LoginController;
+import com.shopee.dao.UsuarioDAO;
 import com.shopee.model.Usuario;
 
 public class LoginFrame extends JFrame {
@@ -24,7 +25,7 @@ public class LoginFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-        
+
         JPanel header = new JPanel();
         JLabel titulo = new JLabel("SHOPEE - LOGIN");
         titulo.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 48));
@@ -75,17 +76,9 @@ public class LoginFrame extends JFrame {
             if (usuario.isEmpty()) {
                 errorMessage.setText("Credenciais inválidas - conta não encontrada");
             } else {
-                System.out.println(usuario.get().getNome());
+                new MainFrame(usuario.get());
+                dispose();
             }
-        });
-    }
-
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            LoginFrame telaLogin = new LoginFrame();
-            telaLogin.setVisible(true);
         });
     }
 }
