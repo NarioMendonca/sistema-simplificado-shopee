@@ -10,10 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import com.shopee.controller.LoginController;
-import com.shopee.dao.UsuarioDAO;
 import com.shopee.model.Usuario;
 
 public class LoginFrame extends JFrame {
@@ -71,7 +69,6 @@ public class LoginFrame extends JFrame {
         add(painelPrincipal);
 
         botaoLogin.addActionListener(e -> {
-            System.out.println(campoEmail.getText() + " " + campoSenha.getText());
             Optional<Usuario> usuario = loginController.logar(campoEmail.getText(), campoSenha.getText());
             if (usuario.isEmpty()) {
                 errorMessage.setText("Credenciais inválidas - conta não encontrada");

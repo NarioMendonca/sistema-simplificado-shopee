@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.concurrent.Flow;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -16,11 +16,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.shopee.controller.CarrinhoController;
+import com.shopee.controller.CarrinhoController.ProdutoCheckout;
+import com.shopee.dao.ProdutoDAO;
+import com.shopee.model.Produto;
 import com.shopee.model.Usuario;
 
 public class MainFrame extends JFrame {
+    private CarrinhoController carrinhoController = new CarrinhoController();
     private Usuario usuario;
     private JPanel carrinhoPanel;
+    private JLabel itensCarrinhoCount;
+    private JLabel valorTotalCarrinho;
 
     public MainFrame(Usuario usuario) {
         this.usuario = usuario;
@@ -72,11 +79,14 @@ public class MainFrame extends JFrame {
     }
 
     public JScrollPane main() {
+        ProdutoDAO produtoDAO = new ProdutoDAO();
         JPanel produtosPanel = new JPanel();
         produtosPanel.setLayout(new BoxLayout(produtosPanel, BoxLayout.Y_AXIS));
 
-        for (int i = 1; i <= 15; i++) {
-            produtosPanel.add(cardProduto("Produto " + i, " R$ " + (i * 15)));
+
+        List<Produto> produtos = produtoDAO.buscarTodos();
+        for (Produto produto : produtos) {
+            produtosPanel.add(cardProduto(produto));
         }
 
         JScrollPane produtosScroll = new JScrollPane(produtosPanel);
@@ -85,19 +95,35 @@ public class MainFrame extends JFrame {
         return produtosScroll;
     }
 
-    private JPanel cardProduto(String nome, String preco) {
+    private JPanel cardProduto(Produto produto) {
         JPanel card = new JPanel();
         card.setLayout(new BorderLayout());
         card.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JLabel nomeLabel = new JLabel(nome);
-        JLabel precoLabel = new JLabel(preco);
+        JLabel nomeLabel = new JLabel(produto.getNome());
+        nomeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        JButton comprar = new JButton("Comprar");
+        JLabel precoLabel = new JLabel("R$ " + produto.getPreco().toString());
+        precoLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        precoLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+
+        JLabel avisoEstoque = new JLabel("fora de estoque");
+        avisoEstoque.setFont(new Font("Arial", Font.BOLD, 16));
+        avisoEstoque.setForeground(Color.RED);
+
+        JButton botaoComprar = new JButton("Comprar");
+        botaoComprar.addActionListener(e -> {
+            carrinhoController.adicionarAoCarrinho(usuario.getId(), produto);
+            itensCarrinhoCount.setText("Quantidade de itens: " + carrinhoController.countCarrinho(usuario.getId()));
+            valorTotalCarrinho.setText("Valor total: R$ " + carrinhoController.valorTotal(usuario.getId()).toString());
+        });
 
         card.add(nomeLabel, BorderLayout.WEST);
         card.add(precoLabel, BorderLayout.CENTER);
-        card.add(comprar, BorderLayout.EAST);
+        card.add(botaoComprar, BorderLayout.EAST);
+        if (produto.getQuantidadeEstoque().equals(0)) {
+            card.add(avisoEstoque, BorderLayout.EAST);
+        }
 
         return card;
     }
@@ -109,13 +135,20 @@ public class MainFrame extends JFrame {
         carrinho.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
         JPanel resumoCarrinho = new JPanel();
-        resumoCarrinho.setLayout(new GridLayout(1, 2));
+        resumoCarrinho.setLayout(new GridLayout(1, 3));
         resumoCarrinho.setOpaque(false);
-        JLabel valorTotal = new JLabel("RS$ 150.45");
-        JLabel itensDoCarrinho = new JLabel("Quantidade de itens: 3");
+
+        JLabel valorTotal = new JLabel("Valor total: RS$ 0");
+        valorTotal.setFont(new Font("Arial", Font.BOLD, 20));
+        valorTotalCarrinho = valorTotal;
+
+        JLabel itensDoCarrinho = new JLabel("Quantidade de itens: 0");
+        itensDoCarrinho.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+        itensDoCarrinho.setFont(new Font("Arial", Font.PLAIN, 20));
+        itensCarrinhoCount = itensDoCarrinho;
+
         resumoCarrinho.add(valorTotal);
         resumoCarrinho.add(itensDoCarrinho);
-
 
         JButton botaoFinalizar = new JButton("Finalizar");
         botaoFinalizar.setPreferredSize(new Dimension(120, 20));
