@@ -10,6 +10,8 @@ public class Cliente extends Usuario {
     OffsetDateTime dataNascimento;
     String endereco;
 
+    public Cliente() {}
+
     public Cliente(
         Integer id,
         Integer usuarioId,

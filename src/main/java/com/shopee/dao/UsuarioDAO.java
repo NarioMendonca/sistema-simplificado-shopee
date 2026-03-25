@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.shopee.model.Cliente;
 import com.shopee.model.Usuario;
+import com.shopee.model.Vendedor;
 import com.shopee.model.Usuario.TipoUsuario;
 import com.shopee.util.DatabaseConnection;
 
@@ -18,16 +20,20 @@ public class UsuarioDAO implements DAO<Usuario> {
     private Connection connection = DatabaseConnection.getInstance().getConnection();
 
     private Usuario mapper(ResultSet rs) {
+        Usuario usuario;
         try {
-            return new Usuario(
-                rs.getInt("id"),
-                rs.getString("nome"),
-                rs.getString("email"),
-                rs.getString("senha"),
-                TipoUsuario.valueOf(rs.getString("tipo")),
-                rs.getObject("data_cadastro", OffsetDateTime.class),
-                rs.getBoolean("ativo")
-            );
+            if (rs.getString("tipo").equals("cliente")) {
+                usuario = new Cliente();
+            } else {
+                usuario = new Vendedor();
+            }
+            usuario.setId(rs.getInt("id"));
+            usuario.setNome(rs.getString("nome"));
+            usuario.setEmail(rs.getString("email"));
+            usuario.setSenha(rs.getString("senha"));
+            usuario.setTipo(TipoUsuario.valueOf(rs.getString("tipo")));
+            usuario.setDataCadastro(rs.getObject("data_cadastro", OffsetDateTime.class));
+            return usuario;
         } catch (SQLException sqlException) {
             throw new RuntimeException("Erro ao mapear dados para entidade usuario", sqlException);
         }

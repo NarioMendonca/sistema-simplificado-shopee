@@ -11,6 +11,8 @@ public class Vendedor extends Usuario {
     String telefone;
     BigDecimal avaliacao;
 
+    public Vendedor() {}
+
     public Vendedor(
         Integer id,
         Integer usuarioId,

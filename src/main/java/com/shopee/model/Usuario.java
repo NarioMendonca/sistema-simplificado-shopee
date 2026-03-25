@@ -17,6 +17,8 @@ public class Usuario {
         vendedor
     }
 
+    public Usuario() {}
+
     public Usuario(
         Integer id,
         String nome,
