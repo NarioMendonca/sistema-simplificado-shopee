@@ -17,8 +17,10 @@ public class CadastroMenu {
 
     public Optional<Usuario> cadastrar() {
         String tipoUsuario = dadoInput("Qual o tipo do usuario a ser cadastrado? [vendedor ou cliente]: ");
-        if (!tipoUsuario.toLowerCase().equals("cliente") || !tipoUsuario.toLowerCase().equals("vendedor"))
-        
+        if (!tipoUsuario.toLowerCase().equals("cliente") && !tipoUsuario.toLowerCase().equals("vendedor")) {
+            System.out.println("Tipo de usuario invalido. Informe cliente ou vendedor.");
+            return Optional.empty();
+        }
 
         System.out.println("Preencha os dados a seguir para criar seu cadastro:");
         String nome = dadoInput("Nome de usuario: ");

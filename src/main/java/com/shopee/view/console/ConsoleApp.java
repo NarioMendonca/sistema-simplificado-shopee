@@ -6,12 +6,13 @@ import java.util.Scanner;
 import com.shopee.model.Usuario;
 import com.shopee.view.console.menus.CadastroMenu;
 import com.shopee.view.console.menus.LoginMenu;
+import com.shopee.view.console.menus.MainMenu;
 
 public class ConsoleApp {
     Scanner scanner = new Scanner(System.in);
     CadastroMenu cadastroMenu = new CadastroMenu();
     LoginMenu loginMenu = new LoginMenu();
-    Usuario usuario;
+    MainMenu mainMenu = new MainMenu();
 
     public void iniciar() {
         System.out.println("Entre na shopee fazendo login ou se cadastrando");
@@ -41,8 +42,8 @@ public class ConsoleApp {
             }
 
             if (!usuario.isEmpty()) {
-                this.usuario = usuario.get();
-                System.out.println("Bem vindo ao sistema, " + this.usuario.getNome());
+                System.out.println("Bem vindo ao sistema, " + usuario.get().getNome());
+                mainMenu.iniciar(usuario.get());
                 break;
             }
         } while (opcao != 3);
