@@ -10,7 +10,6 @@ import com.shopee.dao.PedidoDAO;
 import com.shopee.dao.UsuarioDAO;
 import com.shopee.model.ItemPedido;
 import com.shopee.model.Pedido;
-import com.shopee.model.Produto;
 import com.shopee.model.Usuario;
 import com.shopee.model.Pedido.Status;
 import com.shopee.util.Logger;

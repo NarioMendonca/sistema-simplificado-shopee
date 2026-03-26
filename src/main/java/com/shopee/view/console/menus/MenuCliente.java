@@ -77,7 +77,7 @@ public class MenuCliente {
     }
 
     private void listarProdutos() {
-        List<Produto> produtos = produtoService.listarProdutos();
+        List<Produto> produtos = produtoService.buscarTodos();
         if (produtos.isEmpty()) {
             System.out.println("Nenhum produto encontrado");
             return;

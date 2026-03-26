@@ -32,7 +32,7 @@ public class MenuVendedor {
         int opcao;
         System.out.println("Escolha uma opção");
         do {
-            System.out.println("1 - Listar produtos da loja");
+            System.out.println("1 - Ver produtos da loja");
             System.out.println("2 - Adicionar produto na minha loja");
             System.out.println("3 - Remover produto da minha loja");
             System.out.println("4 - Ver pedidos da loja");
@@ -42,7 +42,7 @@ public class MenuVendedor {
             try {
                 switch (opcao) {
                     case 1:
-                        listarProdutos();
+                        listarProdutos(vendedor.getId());
                         break;
                     case 2:
                         adicionarProduto(vendedor.getId());
@@ -66,8 +66,8 @@ public class MenuVendedor {
         } while (opcao != 5);
     }
 
-    private void listarProdutos() {
-        List<Produto> produtos = produtoService.listarProdutos();
+    private void listarProdutos(Integer vendedorId) {
+        List<Produto> produtos = produtoService.buscarPorVendedor(vendedorId);
         if (produtos.isEmpty()) {
             System.out.println("Nenhum produto encontrado");
             return;

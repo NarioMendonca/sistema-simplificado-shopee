@@ -32,11 +32,11 @@ public class ProdutoService {
         return produto;
     }
 
-    public List<Produto> listarProdutos() {
+    public List<Produto> buscarTodos() {
         return produtoDAO.buscarTodos();
     }
 
-    public List<Produto> listarProdutosPorVendedor(Integer vendedorId) {
+    public List<Produto> buscarPorVendedor(Integer vendedorId) {
         return produtoDAO.buscarPorVendedorId(vendedorId);
     }
 
