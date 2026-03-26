@@ -60,6 +60,9 @@ public class MenuCliente {
                     case 5:
                         mostrarPedidos(cliente.getId());
                         break;
+                    case 6:
+                        fecharPedido(cliente.getId(), cliente.getUsuarioId(), cliente.getEndereco());
+                        break;
                     case 7:
                         System.out.println("Saindo...");
                         break;
@@ -135,6 +138,48 @@ public class MenuCliente {
             );
         }
         System.out.println("Total carrinho R$" + carrinhoController.valorTotal(usuarioId));
+    }
+
+    private void fecharPedido(Integer clienteId, Integer usuarioId, String enderecoEntrega) {
+        Optional<List<ProdutoCheckout>> produtos = carrinhoController.buscarCarrinho(usuarioId);
+
+        if (produtos.isEmpty() || produtos.get().isEmpty()) {
+            System.out.println("Adicione produtos no carrinho para fechar um pedido");
+        }
+
+        System.out.println("Métodos de pagamento: ");
+        System.out.println("1 - Cartão: ");
+        System.out.println("2 - Boleto: ");
+        System.out.println("3 - Pix: ");
+        String metodoPagamento = "";
+        int opcao;
+        do {
+            opcao = Componentes.inputInteger("Digite o número do método pagamento: ");
+            switch (opcao) {
+                case 1:
+                    metodoPagamento = "cartao";
+                    break;
+                case 2:
+                    metodoPagamento = "boleto";
+                    break;
+                case 3:
+                    metodoPagamento = "pix";
+                    break;
+                default:
+                    System.out.println("Método de pagamento inválido");
+                    break;
+            }
+        } while (opcao < 1 || opcao > 3);
+
+        pedidoService.criarPedido(
+            clienteId, 
+            produtos.get(), 
+            carrinhoController.valorTotal(usuarioId), 
+            metodoPagamento,
+            enderecoEntrega
+        );
+
+        carrinhoController.apagarCarrinho(usuarioId);
     }
 
     private void mostrarPedidos(Integer clienteId) {

@@ -45,7 +45,7 @@ public class PedidoDAO implements DAO<Pedido> {
             metodo_pagamento,
             endereco_entrega
         ) 
-        VALUES (?, ?, ?, ?, ?) RETURNING id, data_pedido
+        VALUES (?, ?, ?, ?, ?) RETURNING id, data_pedido;
         """;
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
             pstm.setInt(1, pedido.getClienteId());
@@ -59,6 +59,41 @@ public class PedidoDAO implements DAO<Pedido> {
                 pedido.setId(resultSet.getInt("id"));
                 pedido.setDataPedido(resultSet.getObject("data_pedido", OffsetDateTime.class));
             }
+
+            // Isso não é uma boa prática, o ideal é utilizar transactions para garantir que 
+            // um pedido não seja inserido sem seu item, 
+            // além de gerar um só sql para inserir tudo dinamicamente sem precisar fazer várias requisiões ao banco
+            // está assim apenas por conta da urgencia
+            // precisa refatorar!!
+            for (ItemPedido itemPedido : pedido.getItensPedidos()) {
+                String itemPedidoSql = """
+                INSERT INTO item_pedido (
+                    pedido_id,
+                    produto_id,
+                    quantidade,
+                    preco_unitario
+                )  VALUES (?, ?, ?, ?) RETURNING id;
+                """;;
+                try (PreparedStatement pstmItens = connection.prepareStatement(itemPedidoSql)) {
+                    pstmItens.setInt(1, pedido.getId());
+                    pstmItens.setInt(2, itemPedido.getProdutoId());
+                    pstmItens.setInt(3, itemPedido.getQuantidade());
+                    pstmItens.setBigDecimal(4, itemPedido.getPrecoUnitario());
+
+                    ResultSet resultSetItens = pstmItens.executeQuery();
+                    if (resultSet.next()) {
+                        itemPedido.setId(resultSetItens.getInt("id"));
+                    }
+                }
+
+                String atualizarProdutoSql = "UPDATE produto SET quantidade_estoque = quantidade_estoque - ? WHERE id = ?;";
+                try (PreparedStatement pstmProduto = connection.prepareStatement(atualizarProdutoSql)) {
+                    pstmProduto.setInt(1, itemPedido.getQuantidade());
+                    pstmProduto.setInt(2, itemPedido.getProdutoId());
+                    pstmProduto.executeUpdate();
+                }
+            }
+
             return pedido;
         } catch (SQLException sqlException) {
             Logger.getInstance().logDebug("Erro ao inserir", sqlException);

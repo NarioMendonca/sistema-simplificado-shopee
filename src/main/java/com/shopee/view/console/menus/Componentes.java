@@ -10,7 +10,9 @@ public class Componentes {
         while (true) {
             try {
                 System.out.println(text);
-                return scanner.nextInt();
+                Integer numero = scanner.nextInt();
+                scanner.nextLine();
+                return numero;
             } catch (NumberFormatException exception) {
                 System.out.println("Digite um numero inteiro válido");
             }

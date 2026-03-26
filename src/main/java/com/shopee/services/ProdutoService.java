@@ -1,6 +1,5 @@
 package com.shopee.services;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +17,8 @@ public class ProdutoService {
         //TODO - verify if a product with same name already exists
 
         Produto produtoSalvo = produtoDAO.salvar(produto);
-        logger.logInfo("Produto cadastrado com sucesso id=" + produtoSalvo.getId());        return produtoSalvo;
+        logger.logInfo("Produto cadastrado com sucesso id=" + produtoSalvo.getId());        
+        return produtoSalvo;
     }
 
     public Produto atualizar(Produto produto) {
