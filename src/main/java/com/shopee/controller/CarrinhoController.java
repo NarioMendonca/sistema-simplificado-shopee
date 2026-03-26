@@ -1,6 +1,7 @@
 package com.shopee.controller;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,6 +94,11 @@ public class CarrinhoController {
         public ProdutoCheckout(Produto produto, Integer quantidade) {
             this.produto = produto;
             this.quantidade = quantidade;
+        }
+
+        public BigDecimal calcularTotal() {
+            BigDecimal total = this.getProduto().getPreco().multiply(new BigDecimal(this.getQuantidade()));
+            return total;
         }
 
         public Produto getProduto() {

@@ -65,7 +65,6 @@ public class UsuarioService {
             );
 
             Cliente clienteCriado = usuarioDAO.salvarCliente(cliente);
-            logger.logInfo("Cadastro de cliente concluido usuarioId=" + clienteCriado.getUsuarioId());
             return clienteCriado;
         } catch (Exception exception) {
             logger.logError("Erro ao cadastrar cliente email=" + email, exception);
@@ -95,7 +94,6 @@ public class UsuarioService {
             );
 
             Vendedor vendedorCriado = usuarioDAO.salvarVendedor(vendedor);
-            logger.logInfo("Cadastro de vendedor realizado usuarioId=" + vendedorCriado.getUsuarioId());
             return vendedorCriado;
         } catch (Exception exception) {
             logger.logError("Erro ao cadastrar vendedor email=" + email, exception);
@@ -107,8 +105,7 @@ public class UsuarioService {
         Optional<Cliente> cliente = usuarioDAO.buscarCliente(usuarioId);
         if (cliente.isEmpty()) {
             logger.logInfo("Falha ao buscar cliente usuarioId=" + usuarioId);
-        } else {
-            logger.logInfo("Cliente encontrado usuarioId=" + usuarioId);
+            return Optional.empty();
         }
         return cliente;
     }
@@ -119,7 +116,6 @@ public class UsuarioService {
             logger.logInfo("Vendedor nao encontrado usuarioId=" + usuarioId);
             return Optional.empty();
         } else {
-            logger.logInfo("Vendedor encontrado usuarioId=" + usuarioId);
             return vendedor;
         }
     }

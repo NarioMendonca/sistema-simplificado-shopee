@@ -98,6 +98,44 @@ public class PedidoDAO implements DAO<Pedido> {
         }
     }
 
+    public List<Pedido> buscarPorClienteId(int clienteId) {
+        List<Pedido> pedidos = new ArrayList<>();
+        String sql = "SELECT * FROM pedido WHERE cliente_id = ? ORDER BY data_pedido DESC";
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setInt(1, clienteId);
+            ResultSet resultSet = pstm.executeQuery();
+            while (resultSet.next()) {
+                pedidos.add(mapper(resultSet));
+            }
+            return pedidos;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao buscar pedidos do cliente id=" + clienteId, sqlException);
+        }
+    }
+
+    public List<Pedido> buscarPorVendedorId(int vendedorId) {
+        List<Pedido> pedidos = new ArrayList<>();
+        String sql = """
+            SELECT DISTINCT p.*
+            FROM pedido p
+            INNER JOIN item_pedido ip ON ip.pedido_id = p.id
+            INNER JOIN produto pr ON pr.id = ip.produto_id
+            WHERE pr.vendedor_id = ?
+            ORDER BY p.data_pedido DESC
+        """;
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setInt(1, vendedorId);
+            ResultSet resultSet = pstm.executeQuery();
+            while (resultSet.next()) {
+                pedidos.add(mapper(resultSet));
+            }
+            return pedidos;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao buscar pedidos do vendedor id=" + vendedorId, sqlException);
+        }
+    }
+
     @Override
     public void atualizar(Pedido pedido) {
         String sql = """

@@ -103,6 +103,21 @@ public class ProdutoDAO implements DAO<Produto> {
         
     }
 
+    public List<Produto> buscarPorVendedorId(int vendedorId) {
+        List<Produto> produtos = new ArrayList<>();
+        String sql = "SELECT * FROM produto WHERE vendedor_id = ? ORDER BY data_cadastro DESC";
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setInt(1, vendedorId);
+            ResultSet resultSet = pstm.executeQuery();
+            while (resultSet.next()) {
+                produtos.add(mapper(resultSet));
+            }
+            return produtos;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException("Erro ao buscar produtos do vendedor id=" + vendedorId, sqlException);
+        }
+    }
+
     @Override
     public void atualizar(Produto produto) {
         String sql = """

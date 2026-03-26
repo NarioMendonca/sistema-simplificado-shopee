@@ -36,7 +36,7 @@ public class Vendedor extends Usuario {
 
     @Override
     public Integer getId() {
-        return this.getId();
+        return this.id;
     }
 
     public Integer getUsuarioId() {
