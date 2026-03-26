@@ -3,10 +3,14 @@ package com.shopee.services;
 import java.util.Optional;
 
 import com.shopee.dao.UsuarioDAO;
+import com.shopee.model.Cliente;
 import com.shopee.model.Usuario;
+import com.shopee.model.Vendedor;
+import com.shopee.util.Logger;
 
 public class UsuarioService {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
+    private Logger logger = Logger.getInstance();
 
     public Usuario cadastrar(String nome, String email, String senha, Usuario.TipoUsuario tipo) {
         if (nome.length() < 3) {
@@ -21,17 +25,103 @@ public class UsuarioService {
             throw new RuntimeException("Senha deve ser maior que 6 caracteres");
         }
 
-        Usuario usuario = new Usuario(
-            null, 
-            nome, 
-            email, 
-            senha, 
-            tipo, 
-            null, 
-            false
-        );
-        Usuario usuarioCriado = usuarioDAO.salvar(usuario);
-        return usuarioCriado;
+        try {
+            Usuario usuario = new Usuario(
+                null, 
+                nome, 
+                email, 
+                senha, 
+                tipo, 
+                null, 
+                false
+            );
+            Usuario usuarioCriado = usuarioDAO.salvar(usuario);
+            return usuarioCriado;
+        } catch (Exception exception) {
+            logger.logError("Erro ao cadastrar usuario email=" + email, exception);
+            throw new RuntimeException("Erro ao cadastrar usuario", exception);
+        }
+    }
+
+    public Cliente criarCliente(String nome, String email, String senha, String cpf, String telefone, java.time.OffsetDateTime dataNascimento, String endereco) {
+        if (cpf == null || cpf.length() != 11) {
+            throw new RuntimeException("CPF deve ter 11 caracteres");
+        }
+
+        try {
+            Cliente cliente = new Cliente(
+                null,
+                null,
+                nome,
+                email,
+                senha,
+                Usuario.TipoUsuario.cliente,
+                null,
+                true,
+                cpf,
+                telefone,
+                dataNascimento,
+                endereco
+            );
+
+            Cliente clienteCriado = usuarioDAO.salvarCliente(cliente);
+            logger.logInfo("Cadastro de cliente concluido usuarioId=" + clienteCriado.getUsuarioId());
+            return clienteCriado;
+        } catch (Exception exception) {
+            logger.logError("Erro ao cadastrar cliente email=" + email, exception);
+            throw new RuntimeException("Erro ao cadastrar cliente", exception);
+        }
+    }
+
+    public Vendedor criarVendedor(String nome, String email, String senha, String cnpj, String razaoSocial, String telefone) {
+        if (cnpj == null || cnpj.length() != 14) {
+            throw new RuntimeException("CNPJ deve ter 14 caracteres");
+        }
+
+        try {
+            Vendedor vendedor = new Vendedor(
+                null,
+                null,
+                nome,
+                email,
+                senha,
+                Usuario.TipoUsuario.vendedor,
+                null,
+                true,
+                cnpj,
+                razaoSocial,
+                telefone,
+                null
+            );
+
+            Vendedor vendedorCriado = usuarioDAO.salvarVendedor(vendedor);
+            logger.logInfo("Cadastro de vendedor realizado usuarioId=" + vendedorCriado.getUsuarioId());
+            return vendedorCriado;
+        } catch (Exception exception) {
+            logger.logError("Erro ao cadastrar vendedor email=" + email, exception);
+            throw new RuntimeException("erro ao cadastrar vendedor", exception);
+        }
+    }
+
+    public Optional<Cliente> buscarCliente(Integer usuarioId) {
+        Optional<Cliente> cliente = usuarioDAO.buscarCliente(usuarioId);
+        if (cliente.isEmpty()) {
+            logger.logInfo("Falha ao buscar cliente usuarioId=" + usuarioId);
+        } else {
+            logger.logInfo("Cliente encontrado usuarioId=" + usuarioId);
+        }
+        return cliente;
+    }
+
+    public Optional<Vendedor> buscarVendedor(Integer usuarioId) {
+        Optional<Vendedor> vendedor = usuarioDAO.buscarVendedor(usuarioId);
+        if (vendedor.isEmpty()) {
+            logger.logInfo("Vendedor nao encontrado usuarioId=" + usuarioId);
+            return Optional.empty();
+        } else {
+            logger.logInfo("Vendedor encontrado usuarioId=" + usuarioId);
+            return vendedor;
+        }
     }
 
     public Usuario logar(String email, String senha) {
@@ -67,17 +157,21 @@ public class UsuarioService {
         }
 
 
-        Usuario usuario = new Usuario(
-            id, 
-            (nome != null) ? nome : antigoUsuario.get().getNome(), 
-            (email != null) ? email : antigoUsuario.get().getEmail(), 
-            (senha != null) ? senha : antigoUsuario.get().getSenha(), 
-            null, 
-            null, 
-            (ativo != null) ? ativo : antigoUsuario.get().getAtivo()
-        );
-
-        usuarioDAO.atualizar(usuario);
-        return usuario;
+        try {
+            Usuario usuario = new Usuario(
+                id, 
+                (nome != null) ? nome : antigoUsuario.get().getNome(), 
+                (email != null) ? email : antigoUsuario.get().getEmail(), 
+                (senha != null) ? senha : antigoUsuario.get().getSenha(), 
+                null, 
+                null, 
+                (ativo != null) ? ativo : antigoUsuario.get().getAtivo()
+            );
+            usuarioDAO.atualizar(usuario);
+            return usuario;
+        } catch (Exception exception) {
+            logger.logError("Erro ao atualizar dados de usuario id=" + id, exception);
+            throw new RuntimeException("Erro ao atualizar dados de usuario id=" + id, exception);
+        }
     } 
 }
