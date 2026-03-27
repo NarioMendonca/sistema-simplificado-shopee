@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.shopee.controller.CarrinhoController;
-import com.shopee.controller.CarrinhoController.ProdutoCheckout;
 import com.shopee.dao.ProdutoDAO;
 import com.shopee.model.Produto;
 import com.shopee.model.Usuario;

@@ -2,7 +2,7 @@
 
 -- Tabela de usuários
 -- enum não pode ser criado junto com o campo
-CREATE TYPE IF NOT EXISTS tipo_usuario AS ENUM('cliente', 'vendedor');
+CREATE TYPE tipo_usuario AS ENUM('cliente', 'vendedor');
 
 CREATE TABLE usuario (
   id SERIAL PRIMARY KEY,
@@ -83,6 +83,8 @@ CREATE TABLE item_pedido (
   FOREIGN KEY (produto_id) REFERENCES produto(id)
 );
 
+CREATE TYPE nivel_log AS ENUM('INFO', 'WARNING', 'ERROR');
+
 -- Tabela de logs
 CREATE TABLE log_sistema (
   id SERIAL PRIMARY KEY,
@@ -93,3 +95,10 @@ CREATE TABLE log_sistema (
   
   FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
+
+-- scripts de usuarios padrão
+
+INSERT INTO usuario (nome, email, senha, tipo) VALUES ('Cliente padrao', 'cliente@gmail.com', 'cliente123', 'cliente');
+INSERT INTO cliente (usuario_id, cpf, telefone, data_nascimento, endereco) VALUES (1, '12345678901', '88996669999', '2000-12-12', 'Rua dos arroios, 13, 63660000');
+INSERT INTO usuario (nome, email, senha, tipo) VALUES ('Vendedor padrao', 'vendedor@gmail.com', 'vendedor123', 'vendedor');
+INSERT INTO vendedor (usuario_id, cnpj, razao_social, telefone) VALUES (2, '12345678901234', 'Loja de eletronicos', '88997109999');

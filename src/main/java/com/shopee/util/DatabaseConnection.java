@@ -2,8 +2,11 @@ package com.shopee.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Properties;
@@ -32,6 +35,7 @@ public class DatabaseConnection {
             // o servidor não roda se não for possível se conectar no banco de dados
             throw new RuntimeException("Error to connect to database");
         }
+        rodarMigration();
     }
 
     public void getProperties(String propertiesFile) {
@@ -54,5 +58,16 @@ public class DatabaseConnection {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public void rodarMigration() {
+        try {
+            String sql = Files.readString(Path.of("src/main/java/resources/database.sql"));
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.executeUpdate();
+            }
+        } catch (IOException | SQLException exception) {
+            Logger.getInstance().logError("Erro ao executar migrations", exception);
+        }
     }
 }
