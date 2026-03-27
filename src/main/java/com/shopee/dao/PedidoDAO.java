@@ -177,15 +177,17 @@ public class PedidoDAO implements DAO<Pedido> {
             UPDATE pedido SET 
                 status = ?, 
                 metodo_pagamento = ?, 
-                endereco_entrega = ?,
+                endereco_entrega = ?
             WHERE id = ?
         """;
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
             pstm.setObject(1, pedido.getStatus(), Types.OTHER);
             pstm.setString(2, pedido.getMetodoPagamento());
             pstm.setString(3, pedido.getEnderecoEntrega());
+            pstm.setInt(4, pedido.getId());
             pstm.executeUpdate();
         } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
             throw new RuntimeException("Erro ao atualizar dados de pedido id=" + pedido.getId(), sqlException);
         }
     }

@@ -40,7 +40,8 @@ public class MenuCliente {
             System.out.println("4 - Ver carrinho");
             System.out.println("5 - Ver pedidos");
             System.out.println("6 - Finalizar pedido");
-            System.out.println("7 - Sair");
+            System.out.println("7 - Pagar pedido");
+            System.out.println("8 - Sair");
             opcao = Componentes.inputInteger("Opcão: ");
 
             try {
@@ -64,6 +65,9 @@ public class MenuCliente {
                         fecharPedido(cliente.getId(), cliente.getUsuarioId(), cliente.getEndereco());
                         break;
                     case 7:
+                        pagarPedido();
+                        break;
+                    case 8:
                         System.out.println("Saindo...");
                         break;
                     default:
@@ -73,7 +77,7 @@ public class MenuCliente {
                 logger.logError("Falha ao executar operacao no menu de cliente", exception);
                 System.out.println("Falha: " + exception.getMessage());
             }
-        } while (opcao != 7);
+        } while (opcao != 8);
     }
 
     private void listarProdutos() {
@@ -180,6 +184,11 @@ public class MenuCliente {
         );
 
         carrinhoController.apagarCarrinho(usuarioId);
+    }
+
+    private void pagarPedido() {
+        Integer pedidoId = Componentes.inputInteger("Id do pedido a ser pago: ");
+        pedidoService.pagarPedido(pedidoId);
     }
 
     private void mostrarPedidos(Integer clienteId) {
