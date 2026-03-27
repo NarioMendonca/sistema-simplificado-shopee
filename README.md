@@ -42,4 +42,15 @@ Cliente padrão: email: cliente@gmail.com senha: cliente123
 Vendedor padrão: email: vendedor@gmail.com senha: vendedor123
 
 # Prints das telas do projeto
+ - tela de login swing:
+  https://ibb.co/jvpKzjqC
+ - tela produtos swing:
+  https://ibb.co/5X6w99Gk
+ - tela de login cli:
+  https://ibb.co/q3Hpg1zW
+ - tela home de cliente cli:
+  https://ibb.co/gFvkX75w
+ - tela home de vendedor cli:
+  https://ibb.co/RkGN4zDH
 # Diagrama de classes simplificado do projeto
+ - https://ibb.co/7H1W8Cw
